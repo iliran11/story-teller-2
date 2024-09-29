@@ -39,7 +39,7 @@ task_3 = Create_chapter(3,writer,[task_1,task_2])
 task_4 = Create_chapter(    4,writer,[task_1,task_2,task_3])
 
 crew = Crew(
-    agents=[suggestor],
+    agents=[suggestor,writer],
     tasks=[suggest_topic, task_1,task_2,task_3,task_4],
     verbose=True,
     process = Process.sequential
