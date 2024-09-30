@@ -1,6 +1,6 @@
+import os
 from crewai import Task
-from crewai_tools import FileWriterTool
-
+from crewai_tools import tool
 
 def writeToFile(result):
     with open("example.md", "a") as file:
@@ -20,10 +20,18 @@ def Create_chapter(sequence, agent, context):
     )
 
 
-suggest_topic = Task(
-    description="Get suggestion about an interesting military event",
-    expected_output="""A one setence topic describing the event by name and time.
-                        The event should highlight an exceptional strategic shifting in human history.
-                        The output should be used as a header for the story. So must be very concise.""",
-    agent=suggestor,
-)
+def Suggest_topic(suggestor):
+    file_names = os.listdir("./stories")
+    for i in range(len(file_names)):
+        file_names[i] = file_names[i].split(".")[0]
+    blacklist = ",".join(file_names)
+    expected_output = f"""A one setence topic describing the event by name and time.
+                            The event should highlight an exceptional strategic shifting in human history.
+                            The output should be used as a header for the story. So must be very concise. And preced by a #.
+                            Also, avoid the following topics: {blacklist}"""
+    return Task(
+        description="Get suggestion about an interesting military event",
+        expected_output=expected_output,
+        agent=suggestor,
+        callback=writeToFile,
+    )
