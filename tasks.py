@@ -2,8 +2,9 @@ import os
 from crewai import Task
 from crewai_tools import tool
 
+
 def writeToFile(result):
-    with open("example.md", "a") as file:
+    with open("temp.md", "a") as file:
         file.write("\n")
         file.write(result.raw)
 
@@ -34,4 +35,12 @@ def Suggest_topic(suggestor):
         expected_output=expected_output,
         agent=suggestor,
         callback=writeToFile,
+    )
+
+
+def Create_file_name(agent):
+    return Task(
+        description="You take a title of a story, and turn it into a filename in kebab case",
+        expected_output="Kebab-case, up to 4-5 parts, based on the title you have been given. you will summarize the title and produce a kebab case.",
+        agent=agent,
     )
